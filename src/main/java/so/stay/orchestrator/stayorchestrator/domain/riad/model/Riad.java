@@ -3,12 +3,14 @@ package so.stay.orchestrator.stayorchestrator.domain.riad.model;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import so.stay.orchestrator.stayorchestrator.domain.shared.valueobject.Money;
 
 import java.util.List;
 
 @Getter
 @Builder
+@Setter
 @AllArgsConstructor
 public class Riad {
     private Long id;

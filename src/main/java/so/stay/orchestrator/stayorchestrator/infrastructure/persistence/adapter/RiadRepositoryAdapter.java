@@ -67,6 +67,7 @@ public class RiadRepositoryAdapter implements RiadRepository {
         List<Amenity> amenities = entity.getAmenities() != null && !entity.getAmenities().isEmpty()
                 ? Arrays.stream(entity.getAmenities().split(","))
                         .map(String::trim)
+                        .map(String::toUpperCase)
                         .map(Amenity::valueOf)
                         .collect(Collectors.toList())
                 : Collections.emptyList();

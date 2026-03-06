@@ -1,0 +1,304 @@
+{
+  "info": {
+    "name": "Stay Orchestrator API Collection",
+    "description": "Collection of all APIs for the Stay Orchestrator application",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Check Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/health",
+              "host": ["{{base_url}}"],
+              "path": ["api", "health"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/users",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users"]
+            }
+          }
+        },
+        {
+          "name": "Get User by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/users/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "1"]
+            }
+          }
+        },
+        {
+          "name": "Create User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"securepassword\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/users",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users"]
+            }
+          }
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"John\",\n  \"lastName\": \"Updated\",\n  \"password\": \"newsecurepassword\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/users/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "1"]
+            }
+          }
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/users/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Riads",
+      "item": [
+        {
+          "name": "Get All Riads",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/riads",
+              "host": ["{{base_url}}"],
+              "path": ["api", "riads"]
+            }
+          }
+        },
+        {
+          "name": "Get Riad by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/riads/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "riads", "1"]
+            }
+          }
+        },
+        {
+          "name": "Search Riads",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/riads/search?city=Marrakech&minPrice=100&maxPrice=500&currency=MAD",
+              "host": ["{{base_url}}"],
+              "path": ["api", "riads", "search"],
+              "query": [
+                { "key": "city", "value": "Marrakech" },
+                { "key": "minPrice", "value": "100" },
+                { "key": "maxPrice", "value": "500" },
+                { "key": "currency", "value": "MAD" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Riad",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Riad Dar Alsaada\",\n  \"address\": \"Medina, Marrakech\",\n  \"city\": \"Marrakech\",\n  \"pricePerNight\": 150.0,\n  \"currency\": \"MAD\",\n  \"amenities\": [\"WIFI\", \"POOL\", \"SPA\"]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/riads",
+              "host": ["{{base_url}}"],
+              "path": ["api", "riads"]
+            }
+          }
+        },
+        {
+          "name": "Update Riad",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Riad Updated Name\",\n  \"pricePerNight\": 175.0\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/riads/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "riads", "1"]
+            }
+          }
+        },
+        {
+          "name": "Delete Riad",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/riads/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "riads", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Prestations",
+      "item": [
+        {
+          "name": "Get All Prestations",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/prestations?type=CLEANING&city=Marrakech",
+              "host": ["{{base_url}}"],
+              "path": ["api", "prestations"],
+              "query": [
+                { "key": "type", "value": "CLEANING" },
+                { "key": "city", "value": "Marrakech" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Prestation by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/prestations/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "prestations", "1"]
+            }
+          }
+        },
+        {
+          "name": "Create Prestation",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Nettoyage de Printemps\",\n  \"type\": \"CLEANING\",\n  \"price\": 50.0,\n  \"city\": \"Marrakech\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/prestations",
+              "host": ["{{base_url}}"],
+              "path": ["api", "prestations"]
+            }
+          }
+        },
+        {
+          "name": "Update Prestation",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Nettoyage Express\",\n  \"price\": 30.0\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/prestations/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "prestations", "1"]
+            }
+          }
+        },
+        {
+          "name": "Delete Prestation",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/prestations/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "prestations", "1"]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080",
+      "type": "string"
+    }
+  ]
+}
