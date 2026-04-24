@@ -6,6 +6,7 @@ import so.stay.orchestrator.stayorchestrator.domain.riad.model.Riad;
 import so.stay.orchestrator.stayorchestrator.domain.riad.port.out.RiadRepository;
 import so.stay.orchestrator.stayorchestrator.domain.shared.valueobject.Money;
 import so.stay.orchestrator.stayorchestrator.infrastructure.persistence.entity.RiadEntity;
+import so.stay.orchestrator.stayorchestrator.infrastructure.persistence.entity.UserEntity;
 import so.stay.orchestrator.stayorchestrator.infrastructure.persistence.repository.JpaRiadRepository;
 
 import java.util.Arrays;
@@ -74,6 +75,7 @@ public class RiadRepositoryAdapter implements RiadRepository {
 
         return Riad.builder()
                 .id(entity.getId())
+                .ownerId(entity.getOwner() != null ? entity.getOwner().getId() : null)
                 .name(entity.getName())
                 .city(entity.getCity())
                 .address(entity.getAddress())
@@ -92,6 +94,7 @@ public class RiadRepositoryAdapter implements RiadRepository {
 
         return RiadEntity.builder()
                 .id(riad.getId())
+                .owner(riad.getOwnerId() != null ? UserEntity.builder().id(riad.getOwnerId()).build() : null)
                 .name(riad.getName())
                 .city(riad.getCity())
                 .address(riad.getAddress())

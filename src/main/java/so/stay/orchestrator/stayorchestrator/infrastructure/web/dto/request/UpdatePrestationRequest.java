@@ -11,7 +11,9 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdatePrestationRequest {
-    
+
+    private Long ownerId;
+
     @Pattern(regexp = "TRANSPORT|GUIDE|RESTAURANT|ACTIVITY|SPA", message = "Invalid prestation type")
     private String type;
     

@@ -20,6 +20,10 @@ public class RiadEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "owner_id")
+    private UserEntity owner;
+
     @Column(nullable = false)
     private String name;
 

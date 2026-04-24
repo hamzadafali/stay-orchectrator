@@ -12,10 +12,14 @@ import so.stay.orchestrator.stayorchestrator.domain.riad.model.Riad;
 import so.stay.orchestrator.stayorchestrator.domain.riad.port.in.RiadUseCase;
 import so.stay.orchestrator.stayorchestrator.domain.riad.port.in.SearchRiadUseCase;
 import so.stay.orchestrator.stayorchestrator.domain.shared.valueobject.Money;
+import so.stay.orchestrator.stayorchestrator.infrastructure.security.userdetails.StayUserDetails;
 import so.stay.orchestrator.stayorchestrator.infrastructure.web.dto.request.CreateRiadRequest;
 import so.stay.orchestrator.stayorchestrator.infrastructure.web.dto.request.UpdateRiadRequest;
 import so.stay.orchestrator.stayorchestrator.infrastructure.web.dto.response.RiadResponse;
 import so.stay.orchestrator.stayorchestrator.infrastructure.web.mapper.RiadWebMapper;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import so.stay.orchestrator.stayorchestrator.infrastructure.security.audit.SecurityAuditService;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -30,27 +34,32 @@ public class RiadController {
     private final SearchRiadUseCase searchRiadUseCase;
     private final RiadAiService riadAiService;
     private final RiadWebMapper riadMapper;
+    private final SecurityAuditService securityAuditService;
 
-    public RiadController(RiadUseCase riadUseCase, SearchRiadUseCase searchRiadUseCase, RiadAiService riadAiService, RiadWebMapper riadMapper) {
+    public RiadController(RiadUseCase riadUseCase, SearchRiadUseCase searchRiadUseCase, RiadAiService riadAiService, RiadWebMapper riadMapper, SecurityAuditService securityAuditService) {
         this.riadUseCase = riadUseCase;
         this.searchRiadUseCase = searchRiadUseCase;
         this.riadAiService = riadAiService;
         this.riadMapper = riadMapper;
+        this.securityAuditService = securityAuditService;
     }
 
     @GetMapping
+    @PreAuthorize("@riadSecurityPolicy.canRead(authentication)")
     public ResponseEntity<List<RiadResponse>> getAllRiads() {
         List<RiadResponse> riads = riadUseCase.getAllRiads().stream().map(riadMapper::toResponse).collect(Collectors.toList());
         return ResponseEntity.ok(riads);
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("@riadSecurityPolicy.canRead(authentication)")
     public ResponseEntity<RiadResponse> getRiadById(@PathVariable Long id) {
         Riad riad = riadUseCase.getRiadById(id);
         return ResponseEntity.ok(riadMapper.toResponse(riad));
     }
 
     @GetMapping("/search")
+    @PreAuthorize("@riadSecurityPolicy.canRead(authentication)")
     public ResponseEntity<List<RiadResponse>> searchRiads(@RequestParam(required = false) String city, @RequestParam(required = false) BigDecimal minPrice, @RequestParam(required = false) BigDecimal maxPrice, @RequestParam(defaultValue = "MAD") String currency) {
         List<Riad> riads;
 
@@ -70,13 +79,24 @@ public class RiadController {
     }
 
     @PostMapping
-    public ResponseEntity<RiadResponse> createRiad(@Valid @RequestBody CreateRiadRequest request) {
+    @PreAuthorize("@riadSecurityPolicy.canCreate(authentication)")
+    public ResponseEntity<RiadResponse> createRiad(
+            @Valid @RequestBody CreateRiadRequest request,
+            Authentication authentication
+    ) {
         Riad riad = riadMapper.toDomain(request);
+
+        StayUserDetails userDetails = (StayUserDetails) authentication.getPrincipal();
+        riad.assignOwner(userDetails.getId());
+
         Riad created = riadUseCase.createRiad(riad);
-        return ResponseEntity.status(HttpStatus.CREATED).body(riadMapper.toResponse(created));
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(riadMapper.toResponse(created));
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("@riadSecurityPolicy.canUpdate(#id, authentication)")
     public ResponseEntity<RiadResponse> updateRiad(@PathVariable Long id, @Valid @RequestBody UpdateRiadRequest request) {
         Riad riad = riadMapper.toDomain(request);
         Riad updated = riadUseCase.updateRiad(id, riad);
@@ -84,6 +104,7 @@ public class RiadController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("@riadSecurityPolicy.canDelete(authentication)")
     public ResponseEntity<Void> deleteRiad(@PathVariable Long id) {
         riadUseCase.deleteRiad(id);
         return ResponseEntity.noContent().build();
@@ -93,6 +114,7 @@ public class RiadController {
      * Génère ET sauvegarde automatiquement la description
      */
     @PostMapping("/{id}/auto-describe")
+    @PreAuthorize("@riadSecurityPolicy.canUpdate(#id, authentication)")
     public ResponseEntity<Riad> autoDescribe(@PathVariable Long id) {
 
         log.info("Request to auto-describe riad {}", id);

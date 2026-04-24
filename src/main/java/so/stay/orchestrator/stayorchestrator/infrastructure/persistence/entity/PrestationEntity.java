@@ -20,6 +20,10 @@ public class PrestationEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "owner_id")
+    private UserEntity owner;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 50)
     private PrestationTypeEntity type;

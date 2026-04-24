@@ -24,6 +24,7 @@ public class RiadWebMapper {
 
         return RiadResponse.builder()
                 .id(riad.getId())
+                .ownerId(riad.getOwnerId())
                 .name(riad.getName())
                 .city(riad.getCity())
                 .address(riad.getAddress())
@@ -42,6 +43,7 @@ public class RiadWebMapper {
                 : Collections.emptyList();
 
         return Riad.builder()
+                .ownerId(request.getOwnerId())
                 .name(request.getName())
                 .city(request.getCity())
                 .address(request.getAddress())
@@ -63,6 +65,7 @@ public class RiadWebMapper {
                 : null;
 
         return Riad.builder()
+                .ownerId(request.getOwnerId())
                 .name(request.getName())
                 .city(request.getCity())
                 .address(request.getAddress())

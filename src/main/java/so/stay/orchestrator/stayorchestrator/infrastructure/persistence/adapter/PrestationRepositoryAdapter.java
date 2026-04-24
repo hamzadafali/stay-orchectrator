@@ -7,6 +7,7 @@ import so.stay.orchestrator.stayorchestrator.domain.prestation.port.out.Prestati
 import so.stay.orchestrator.stayorchestrator.domain.shared.valueobject.Money;
 import so.stay.orchestrator.stayorchestrator.infrastructure.persistence.entity.PrestationEntity;
 import so.stay.orchestrator.stayorchestrator.infrastructure.persistence.entity.PrestationTypeEntity;
+import so.stay.orchestrator.stayorchestrator.infrastructure.persistence.entity.UserEntity;
 import so.stay.orchestrator.stayorchestrator.infrastructure.persistence.repository.JpaPrestationRepository;
 
 import java.util.List;
@@ -65,6 +66,7 @@ public class PrestationRepositoryAdapter implements PrestationRepository {
     private Prestation toDomain(PrestationEntity entity) {
         return Prestation.builder()
                 .id(entity.getId())
+                .ownerId(entity.getOwner() != null ? entity.getOwner().getId() : null)
                 .type(PrestationType.valueOf(entity.getType().name()))
                 .name(entity.getName())
                 .description(entity.getDescription())
@@ -76,6 +78,7 @@ public class PrestationRepositoryAdapter implements PrestationRepository {
     private PrestationEntity toEntity(Prestation prestation) {
         return PrestationEntity.builder()
                 .id(prestation.getId())
+                .owner(prestation.getOwnerId() != null ? UserEntity.builder().id(prestation.getOwnerId()).build() : null)
                 .type(PrestationTypeEntity.valueOf(prestation.getType().name()))
                 .name(prestation.getName())
                 .description(prestation.getDescription())

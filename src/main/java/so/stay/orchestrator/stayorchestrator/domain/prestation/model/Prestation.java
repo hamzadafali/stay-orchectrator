@@ -10,11 +10,16 @@ import so.stay.orchestrator.stayorchestrator.domain.shared.valueobject.Money;
 @AllArgsConstructor
 public class Prestation {
     private Long id;
+    private Long ownerId;
     private PrestationType type;
     private String name;
     private String description;
     private Money basePrice;
     private String city;
+
+    public void assignOwner(Long ownerId) {
+        this.ownerId = ownerId;
+    }
 
     public void updateDetails(String name, String description) {
         if (name != null && !name.isBlank()) {

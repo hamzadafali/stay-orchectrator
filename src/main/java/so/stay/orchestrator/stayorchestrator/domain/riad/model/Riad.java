@@ -14,12 +14,17 @@ import java.util.List;
 @AllArgsConstructor
 public class Riad {
     private Long id;
+    private Long ownerId;
     private String name;
     private String city;
     private String address;
     private String description;
     private Money basePricePerNight;
     private List<Amenity> amenities;
+
+    public void assignOwner(Long ownerId) {
+        this.ownerId = ownerId;
+    }
 
     public void updateDetails(String name, String description) {
         if (name != null && !name.isBlank()) {

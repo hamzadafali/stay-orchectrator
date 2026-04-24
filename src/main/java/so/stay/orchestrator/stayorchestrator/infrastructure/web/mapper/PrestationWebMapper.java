@@ -14,6 +14,7 @@ public class PrestationWebMapper {
     public PrestationResponse toResponse(Prestation prestation) {
         return PrestationResponse.builder()
                 .id(prestation.getId())
+                .ownerId(prestation.getOwnerId())
                 .type(prestation.getType().name())
                 .name(prestation.getName())
                 .description(prestation.getDescription())
@@ -25,6 +26,7 @@ public class PrestationWebMapper {
 
     public Prestation toDomain(CreatePrestationRequest request) {
         return Prestation.builder()
+                .ownerId(request.getOwnerId())
                 .type(PrestationType.valueOf(request.getType()))
                 .name(request.getName())
                 .description(request.getDescription())
@@ -39,6 +41,7 @@ public class PrestationWebMapper {
                 : null;
 
         return Prestation.builder()
+                .ownerId(request.getOwnerId())
                 .type(request.getType() != null ? PrestationType.valueOf(request.getType()) : null)
                 .name(request.getName())
                 .description(request.getDescription())

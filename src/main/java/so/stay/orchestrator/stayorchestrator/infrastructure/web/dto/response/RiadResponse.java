@@ -14,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class RiadResponse {
     private Long id;
+    private Long ownerId;
     private String name;
     private String city;
     private String address;

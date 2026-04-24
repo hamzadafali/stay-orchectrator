@@ -7,10 +7,14 @@ import org.springframework.web.bind.annotation.*;
 import so.stay.orchestrator.stayorchestrator.domain.prestation.model.Prestation;
 import so.stay.orchestrator.stayorchestrator.domain.prestation.model.PrestationType;
 import so.stay.orchestrator.stayorchestrator.domain.prestation.port.in.PrestationUseCase;
+import so.stay.orchestrator.stayorchestrator.infrastructure.security.userdetails.StayUserDetails;
 import so.stay.orchestrator.stayorchestrator.infrastructure.web.dto.request.CreatePrestationRequest;
 import so.stay.orchestrator.stayorchestrator.infrastructure.web.dto.request.UpdatePrestationRequest;
 import so.stay.orchestrator.stayorchestrator.infrastructure.web.dto.response.PrestationResponse;
 import so.stay.orchestrator.stayorchestrator.infrastructure.web.mapper.PrestationWebMapper;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import so.stay.orchestrator.stayorchestrator.infrastructure.security.audit.SecurityAuditService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,13 +25,16 @@ public class PrestationController {
 
     private final PrestationUseCase prestationUseCase;
     private final PrestationWebMapper prestationMapper;
+    private final SecurityAuditService securityAuditService;
 
-    public PrestationController(PrestationUseCase prestationUseCase, PrestationWebMapper prestationMapper) {
+    public PrestationController(PrestationUseCase prestationUseCase, PrestationWebMapper prestationMapper, SecurityAuditService securityAuditService) {
         this.prestationUseCase = prestationUseCase;
         this.prestationMapper = prestationMapper;
+        this.securityAuditService = securityAuditService;
     }
 
     @GetMapping
+    @PreAuthorize("@prestationSecurityPolicy.canRead(authentication)")
     public ResponseEntity<List<PrestationResponse>> getAllPrestations(
             @RequestParam(required = false) String type,
             @RequestParam(required = false) String city
@@ -50,19 +57,31 @@ public class PrestationController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("@prestationSecurityPolicy.canRead(authentication)")
     public ResponseEntity<PrestationResponse> getPrestationById(@PathVariable Long id) {
         Prestation prestation = prestationUseCase.getPrestationById(id);
         return ResponseEntity.ok(prestationMapper.toResponse(prestation));
     }
 
     @PostMapping
-    public ResponseEntity<PrestationResponse> createPrestation(@Valid @RequestBody CreatePrestationRequest request) {
+    @PreAuthorize("@prestationSecurityPolicy.canCreate(authentication)")
+    public ResponseEntity<PrestationResponse> createPrestation(
+            @Valid @RequestBody CreatePrestationRequest request,
+            Authentication authentication
+    ) {
         Prestation prestation = prestationMapper.toDomain(request);
+
+        StayUserDetails userDetails = (StayUserDetails) authentication.getPrincipal();
+        prestation.assignOwner(userDetails.getId());
+
         Prestation created = prestationUseCase.createPrestation(prestation);
-        return ResponseEntity.status(HttpStatus.CREATED).body(prestationMapper.toResponse(created));
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(prestationMapper.toResponse(created));
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("@prestationSecurityPolicy.canUpdate(#id, authentication)")
     public ResponseEntity<PrestationResponse> updatePrestation(
             @PathVariable Long id,
             @Valid @RequestBody UpdatePrestationRequest request
@@ -73,6 +92,7 @@ public class PrestationController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("@prestationSecurityPolicy.canDelete(authentication)")
     public ResponseEntity<Void> deletePrestation(@PathVariable Long id) {
         prestationUseCase.deletePrestation(id);
         return ResponseEntity.noContent().build();

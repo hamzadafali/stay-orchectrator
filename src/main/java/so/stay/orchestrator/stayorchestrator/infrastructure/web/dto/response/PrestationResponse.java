@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class PrestationResponse {
     private Long id;
+    private Long ownerId;
     private String type;
     private String name;
     private String description;
