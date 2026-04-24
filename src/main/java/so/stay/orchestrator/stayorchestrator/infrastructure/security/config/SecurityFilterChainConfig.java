@@ -78,6 +78,7 @@ public class SecurityFilterChainConfig {
                         .hasAnyRole("VIEWER", "OPERATOR", "ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/prestations/**")
                         .hasAnyRole("VIEWER", "OPERATOR", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                         // Écriture riads et prestations : OPERATOR, ADMIN
                         .requestMatchers(HttpMethod.POST, "/api/riads/**")
                         .hasAnyRole("OPERATOR", "ADMIN")

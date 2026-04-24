@@ -23,13 +23,44 @@
       ]
     },
     {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@stay.so\",\n  \"password\": \"admin123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
+            }
+          }
+        }
+      ]
+    },
+    {
       "name": "Users",
       "item": [
         {
           "name": "Get All Users",
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
             "url": {
               "raw": "{{base_url}}/api/users",
               "host": ["{{base_url}}"],
@@ -41,7 +72,12 @@
           "name": "Get User by ID",
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
             "url": {
               "raw": "{{base_url}}/api/users/1",
               "host": ["{{base_url}}"],
@@ -54,6 +90,10 @@
           "request": {
             "method": "POST",
             "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
               {
                 "key": "Content-Type",
                 "value": "application/json"
@@ -76,6 +116,10 @@
             "method": "PUT",
             "header": [
               {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
                 "key": "Content-Type",
                 "value": "application/json"
               }
@@ -95,7 +139,12 @@
           "name": "Delete User",
           "request": {
             "method": "DELETE",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
             "url": {
               "raw": "{{base_url}}/api/users/1",
               "host": ["{{base_url}}"],
@@ -112,7 +161,12 @@
           "name": "Get All Riads",
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
             "url": {
               "raw": "{{base_url}}/api/riads",
               "host": ["{{base_url}}"],
@@ -124,7 +178,12 @@
           "name": "Get Riad by ID",
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
             "url": {
               "raw": "{{base_url}}/api/riads/1",
               "host": ["{{base_url}}"],
@@ -136,7 +195,12 @@
           "name": "Search Riads",
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
             "url": {
               "raw": "{{base_url}}/api/riads/search?city=Marrakech&minPrice=100&maxPrice=500&currency=MAD",
               "host": ["{{base_url}}"],
@@ -155,6 +219,10 @@
           "request": {
             "method": "POST",
             "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
               {
                 "key": "Content-Type",
                 "value": "application/json"
@@ -177,6 +245,10 @@
             "method": "PUT",
             "header": [
               {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
                 "key": "Content-Type",
                 "value": "application/json"
               }
@@ -196,11 +268,33 @@
           "name": "Delete Riad",
           "request": {
             "method": "DELETE",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
             "url": {
               "raw": "{{base_url}}/api/riads/1",
               "host": ["{{base_url}}"],
               "path": ["api", "riads", "1"]
+            }
+          }
+        },
+        {
+          "name": "Auto-describe Riad",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/riads/1/auto-describe",
+              "host": ["{{base_url}}"],
+              "path": ["api", "riads", "1", "auto-describe"]
             }
           }
         }
@@ -213,7 +307,12 @@
           "name": "Get All Prestations",
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
             "url": {
               "raw": "{{base_url}}/api/prestations?type=CLEANING&city=Marrakech",
               "host": ["{{base_url}}"],
@@ -229,7 +328,12 @@
           "name": "Get Prestation by ID",
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
             "url": {
               "raw": "{{base_url}}/api/prestations/1",
               "host": ["{{base_url}}"],
@@ -242,6 +346,10 @@
           "request": {
             "method": "POST",
             "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
               {
                 "key": "Content-Type",
                 "value": "application/json"
@@ -264,6 +372,10 @@
             "method": "PUT",
             "header": [
               {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
                 "key": "Content-Type",
                 "value": "application/json"
               }
@@ -283,7 +395,12 @@
           "name": "Delete Prestation",
           "request": {
             "method": "DELETE",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
             "url": {
               "raw": "{{base_url}}/api/prestations/1",
               "host": ["{{base_url}}"],
@@ -298,6 +415,11 @@
     {
       "key": "base_url",
       "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "your_jwt_token_here",
       "type": "string"
     }
   ]

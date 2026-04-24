@@ -2,7 +2,9 @@
   id BIGSERIAL PRIMARY KEY,
   email VARCHAR(255) NOT NULL UNIQUE,
   hashed_password VARCHAR(255) NOT NULL,
-  full_name VARCHAR(255) NOT NULL
+  full_name VARCHAR(255) NOT NULL,
+   enabled BOOLEAN DEFAULT TRUE,
+    role VARCHAR(20) DEFAULT 'VIEWER'
 );
 
 CREATE TABLE riads (

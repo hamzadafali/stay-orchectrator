@@ -3,7 +3,7 @@ package so.stay.orchestrator.stayorchestrator.infrastructure.persistence.adapter
 import org.springframework.stereotype.Component;
 import so.stay.orchestrator.stayorchestrator.domain.shared.valueobject.Email;
 import so.stay.orchestrator.stayorchestrator.domain.user.model.User;
-import so.stay.orchestrator.stayorchestrator.domain.user.port.out.UserRepository;
+import so.stay.orchestrator.stayorchestrator.domain.user.port.UserRepository;
 import so.stay.orchestrator.stayorchestrator.infrastructure.persistence.entity.UserEntity;
 import so.stay.orchestrator.stayorchestrator.infrastructure.persistence.repository.JpaUserRepository;
 
@@ -34,8 +34,8 @@ public class UserRepositoryAdapter implements UserRepository {
     }
 
     @Override
-    public Optional<User> findByEmail(Email email) {
-        return jpaUserRepository.findByEmail(email.getValue())
+    public Optional<User> findByEmail(String email) {
+        return jpaUserRepository.findByEmail(email)
                 .map(this::toDomain);
     }
 
@@ -55,8 +55,10 @@ public class UserRepositoryAdapter implements UserRepository {
         return User.builder()
                 .id(entity.getId())
                 .email(new Email(entity.getEmail()))
-                .hashedPassword(entity.getHashedPassword())
+                .password(entity.getPassword())
                 .fullName(entity.getFullName())
+                .role(entity.getRole())
+                .enabled(entity.isEnabled())
                 .build();
     }
 
@@ -64,8 +66,10 @@ public class UserRepositoryAdapter implements UserRepository {
         return UserEntity.builder()
                 .id(user.getId())
                 .email(user.getEmail().getValue())
-                .hashedPassword(user.getHashedPassword())
+                .password(user.getPassword())
                 .fullName(user.getFullName())
+                .role(user.getRole())
+                .enabled(user.isEnabled())
                 .build();
     }
 }

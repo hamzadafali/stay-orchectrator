@@ -3,8 +3,10 @@ package so.stay.orchestrator.stayorchestrator.infrastructure.web.controller;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import so.stay.orchestrator.stayorchestrator.domain.user.model.User;
+import so.stay.orchestrator.stayorchestrator.domain.user.model.UserRole;
 import so.stay.orchestrator.stayorchestrator.domain.user.port.in.UserUseCase;
 import so.stay.orchestrator.stayorchestrator.infrastructure.web.dto.request.CreateUserRequest;
 import so.stay.orchestrator.stayorchestrator.infrastructure.web.dto.request.UpdateUserRequest;
@@ -20,10 +22,12 @@ public class UserController {
 
     private final UserUseCase userUseCase;
     private final UserWebMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserController(UserUseCase userUseCase, UserWebMapper userMapper) {
+    public UserController(UserUseCase userUseCase, UserWebMapper userMapper, PasswordEncoder passwordEncoder) {
         this.userUseCase = userUseCase;
         this.userMapper = userMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping
@@ -42,9 +46,8 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserResponse> createUser(@Valid @RequestBody CreateUserRequest request) {
-        // TODO: In a real app, hash the password using BCrypt or similar
-        String hashedPassword = hashPassword(request.getPassword());
-        User user = userMapper.toDomain(request, hashedPassword);
+        String password = passwordEncoder.encode(request.getPassword());
+        User user = userMapper.toDomain(request, password, UserRole.OPERATOR);
         User created = userUseCase.createUser(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(userMapper.toResponse(created));
     }
@@ -54,8 +57,8 @@ public class UserController {
             @PathVariable Long id,
             @Valid @RequestBody UpdateUserRequest request
     ) {
-        String hashedPassword = request.getPassword() != null ? hashPassword(request.getPassword()) : null;
-        User user = userMapper.toDomain(request, hashedPassword);
+        String password = request.getPassword() != null ? passwordEncoder.encode(request.getPassword()) : null;
+        User user = userMapper.toDomain(request, password);
         User updated = userUseCase.updateUser(id, user);
         return ResponseEntity.ok(userMapper.toResponse(updated));
     }
@@ -66,8 +69,4 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    // TODO: Replace with proper password hashing (BCrypt)
-    private String hashPassword(String password) {
-        return "hashed_" + password;
-    }
 }

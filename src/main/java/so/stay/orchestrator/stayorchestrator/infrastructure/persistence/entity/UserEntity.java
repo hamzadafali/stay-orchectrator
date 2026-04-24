@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import so.stay.orchestrator.stayorchestrator.domain.user.model.UserRole;
 
 @Entity
 @Table(name = "users")
@@ -21,9 +22,16 @@ public class UserEntity {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
-    private String hashedPassword;
+    @Column(name = "hashed_password", nullable = false)
+    private String password;
 
     @Column(nullable = false)
     private String fullName;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserRole role;
+
+    @Column(nullable = false)
+    private boolean enabled;
 }

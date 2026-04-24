@@ -6,7 +6,7 @@ import so.stay.orchestrator.stayorchestrator.domain.shared.valueobject.Email;
 import so.stay.orchestrator.stayorchestrator.domain.user.exception.UserNotFoundException;
 import so.stay.orchestrator.stayorchestrator.domain.user.model.User;
 import so.stay.orchestrator.stayorchestrator.domain.user.port.in.UserUseCase;
-import so.stay.orchestrator.stayorchestrator.domain.user.port.out.UserRepository;
+import so.stay.orchestrator.stayorchestrator.domain.user.port.UserRepository;
 
 import java.util.List;
 
@@ -49,8 +49,8 @@ public class UserService implements UserUseCase {
     public User updateUser(Long id, User user) {
         User existing = getUserById(id);
         existing.updateProfile(user.getFullName());
-        if (user.getHashedPassword() != null) {
-            existing.updatePassword(user.getHashedPassword());
+        if (user.getPassword() != null) {
+            existing.updatePassword(user.getPassword());
         }
         return userRepository.save(existing);
     }
